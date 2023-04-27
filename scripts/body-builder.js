@@ -101,7 +101,7 @@ function indexBuild() {
   language.classList.add('language');
   language.innerText = 'To switch the language, the combination is: shift + alt.';
 
-  // как взять язык у клиента?
+  // how to take the language from the client?
   localStorage.setItem('language', 'eng');
 }
 

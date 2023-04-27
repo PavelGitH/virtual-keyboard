@@ -30,6 +30,15 @@
   background-color: #cbd1d8;
   margin: 3px;
   padding: 3px;
+  cursor: pointer;
+}
+
+.key:active {
+  background: #d7e6f3;
+}
+
+.key:hover {
+  transition: all .2s;
 }
 
 .big-key {
