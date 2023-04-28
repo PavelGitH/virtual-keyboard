@@ -31,13 +31,18 @@
   margin: 3px;
   padding: 3px;
   cursor: pointer;
+  transition: all .2s;
+  opacity: 0.8;
 }
 
-.key:active {
+.key:active,
+.key_press {
   background: #d7e6f3;
+  transition: all .2s;
 }
 
 .key:hover {
+  opacity: 1;
   transition: all .2s;
 }
 

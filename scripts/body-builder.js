@@ -96,7 +96,6 @@ function indexBuild() {
   const textArea = document.createElement('textarea');
   main.append(textArea);
   textArea.classList.add('text_area');
-  textArea.setAttribute('id', 'textArea');
 
   const keyboard = document.createElement('div');
   main.append(keyboard);
@@ -113,6 +112,11 @@ function indexBuild() {
   main.append(languages);
   languages.classList.add('languages');
   languages.innerText = 'To switch the language, the combination is: shift + alt.';
+}
+
+function render() {
+  localStorage.text = text.join('');
+  document.querySelector('textarea').innerHTML = localStorage.text;
 }
 
 function mouseInput() {
@@ -133,29 +137,141 @@ function mouseInput() {
     if (event.target.classList.contains('backspace')) {
       text.splice(text.length - 1, 1);
     }
-    localStorage.text = text.join('');
-    document.querySelector('textarea').innerHTML = localStorage.text;
+    render();
   });
+}
+
+function toggleCaps() {
+  const letters = document.querySelectorAll('.key-simple');
+  const capsLock = document.querySelector('.caps');
+  if (capsLock.classList.contains('caps-on')) {
+    letters.forEach((element) => {
+      // the letter variable is introduced to work around the eslint bug;
+      const letter = element;
+      letter.innerText = letter.innerText.toUpperCase();
+    });
+  } else {
+    letters.forEach((element) => {
+      // the letter variable is introduced to work around the eslint bug;
+      const letter = element;
+      letter.innerText = letter.innerText.toLowerCase();
+    });
+  }
 }
 
 function capsLockToggle() {
   const capsLock = document.querySelector('.caps');
-  const letters = document.querySelectorAll('.key-simple');
   capsLock.addEventListener('click', () => {
     capsLock.classList.toggle('caps-on');
+    toggleCaps();
+  });
+}
 
-    if (capsLock.classList.contains('caps-on')) {
-      letters.forEach((element) => {
-        // the letter variable is introduced to work around the eslint bug;
-        const letter = element;
-        letter.innerText = letter.innerText.toUpperCase();
-      });
-    } else {
-      letters.forEach((element) => {
-        // the letter variable is introduced to work around the eslint bug;
-        const letter = element;
-        letter.innerText = letter.innerText.toLowerCase();
-      });
+function keyboardInput() {
+  const capsLock = document.querySelector('.caps');
+  const buttons = document.querySelectorAll('.key');
+
+  window.addEventListener('keydown', (event) => {
+    buttons.forEach((element) => {
+      if (element.innerHTML === event.key) {
+        element.classList.add('key_press');
+      }
+      if (element.innerHTML === 'Ctrl' && event.key === 'Control') {
+        element.classList.add('key_press');
+      }
+      if (element.innerHTML === '↑' && event.key === 'ArrowUp') {
+        element.classList.add('key_press');
+      }
+      if (element.innerHTML === '→' && event.key === 'ArrowRight') {
+        element.classList.add('key_press');
+      }
+      if (element.innerHTML === '←' && event.key === 'ArrowLeft') {
+        element.classList.add('key_press');
+      }
+      if (element.innerHTML === '↓' && event.key === 'ArrowDown') {
+        element.classList.add('key_press');
+      }
+    });
+    switch (event.key) {
+      case ' ':
+        text.push(' ');
+        break;
+      case 'Enter':
+        text.push('\n');
+        break;
+      case 'Backspace':
+        text.splice(text.length - 1, 1);
+        render();
+        break;
+      case 'Shift':
+        capsLock.classList.add('caps-on');
+        toggleCaps();
+        break;
+      case 'Alt':
+        break;
+      case 'Meta':
+        break;
+      case 'Control':
+        break;
+      case 'ArrowUp':
+        break;
+      case 'ArrowRight':
+        break;
+      case 'ArrowLeft':
+        break;
+      case 'ArrowDown':
+        break;
+      case 'Tab':
+        text.push('    ');
+        break;
+      case 'CapsLock':
+        if (event.getModifierState('CapsLock')) {
+          capsLock.classList.add('caps-on');
+          toggleCaps();
+          break;
+        } else {
+          capsLock.classList.remove('caps-on');
+          toggleCaps();
+          break;
+        }
+      default:
+        text.push(event.key);
+        render();
+        break;
+    }
+  });
+
+  window.addEventListener('keyup', (event) => {
+    buttons.forEach((element) => {
+      if (element.innerHTML === event.key) {
+        element.classList.remove('key_press');
+      }
+      if (element.innerHTML === 'Ctrl' && event.key === 'Control') {
+        element.classList.remove('key_press');
+      }
+      if (element.innerHTML === '↑' && event.key === 'ArrowUp') {
+        element.classList.remove('key_press');
+      }
+      if (element.innerHTML === '→' && event.key === 'ArrowRight') {
+        element.classList.remove('key_press');
+      }
+      if (element.innerHTML === '←' && event.key === 'ArrowLeft') {
+        element.classList.remove('key_press');
+      }
+      if (element.innerHTML === '↓' && event.key === 'ArrowDown') {
+        element.classList.remove('key_press');
+      }
+    });
+    switch (event.key) {
+      case 'Shift':
+        capsLock.classList.remove('caps-on');
+        toggleCaps();
+        break;
+      default:
+        buttons.forEach((element) => {
+          element.classList.remove('key_press');
+        });
+        break;
     }
   });
 }
@@ -163,3 +279,4 @@ function capsLockToggle() {
 indexBuild();
 mouseInput();
 capsLockToggle();
+keyboardInput();
