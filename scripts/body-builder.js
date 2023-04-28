@@ -54,7 +54,22 @@ function initKeyboard() {
         button.classList.add('win');
         button.innerHTML = 'Win';
         break;
-
+      case '↑':
+        button.classList.add('up');
+        button.innerHTML = '↑';
+        break;
+      case '←':
+        button.classList.add('left');
+        button.innerHTML = '←';
+        break;
+      case '→':
+        button.classList.add('right');
+        button.innerHTML = '→';
+        break;
+      case '↓':
+        button.classList.add('down');
+        button.innerHTML = '↓';
+        break;
       default:
         button.innerText = elem;
         button.classList.add('key-simple');
