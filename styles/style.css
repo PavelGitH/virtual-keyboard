@@ -1,5 +1,5 @@
 .description,
-.language,
+.languages,
 .title {
   text-align: center;
 }
@@ -41,7 +41,9 @@
   transition: all .2s;
 }
 
-.big-key {
+.tab,
+.backspace,
+.caps {
   width: 86px;
 }
 
@@ -51,6 +53,6 @@
   width: 90px;
 }
 
-.space-key {
+.space {
   width: 356px;
 }
