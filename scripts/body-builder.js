@@ -50,6 +50,10 @@ function initKeyboard() {
         button.classList.add('tab');
         button.innerHTML = 'Tab';
         break;
+      case 'Win':
+        button.classList.add('win');
+        button.innerHTML = 'Win';
+        break;
 
       default:
         button.innerText = elem;
@@ -119,5 +123,28 @@ function mouseInput() {
   });
 }
 
+function capsLockToggle() {
+  const capsLock = document.querySelector('.caps');
+  const letters = document.querySelectorAll('.key-simple');
+  capsLock.addEventListener('click', () => {
+    capsLock.classList.toggle('caps-on');
+
+    if (capsLock.classList.contains('caps-on')) {
+      letters.forEach((element) => {
+        // the letter variable is introduced to work around the eslint bug;
+        const letter = element;
+        letter.innerText = letter.innerText.toUpperCase();
+      });
+    } else {
+      letters.forEach((element) => {
+        // the letter variable is introduced to work around the eslint bug;
+        const letter = element;
+        letter.innerText = letter.innerText.toLowerCase();
+      });
+    }
+  });
+}
+
 indexBuild();
 mouseInput();
+capsLockToggle();
