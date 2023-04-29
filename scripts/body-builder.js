@@ -1,6 +1,7 @@
 const keyboardButtonsEng = ['`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'Backspace', 'Tab', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\\', 'CapsLock', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', '\'', 'Enter', 'Shift', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', '↑', 'Shift', 'Ctrl', 'Win', 'Alt', 'Space', 'Alt', '←', '↓', '→', 'Ctrl'];
 const keyboardButtonsEngShift = ['~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+', 'Backspace', 'Tab', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '{', '}', '|', 'CapsLock', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ':', '"', 'Enter', 'Shift', 'z', 'x', 'c', 'v', 'b', 'n', 'm', '< ', '>', '?', '↑', 'Shift', 'Ctrl', 'Win', 'Alt', 'Space', 'Alt', '←', '↓', '→', 'Ctrl'];
 const keyboardButtonsRus = ['ё', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'Backspace', 'Tab', 'й', 'ц', 'у', 'к', 'е', 'н', 'г', 'ш', 'щ', 'з', 'х', 'ъ', '\\', 'CapsLock', 'ф', 'ы', 'в', 'а', 'п', 'р', 'о', 'л', 'д', 'ж', 'э', 'Enter', 'Shift', 'я', 'ч', 'с', 'м', 'и', 'т', 'ь', 'б', 'ю', '.', '↑', 'Shift', 'Ctrl', 'Win', 'Alt', 'Space', 'Alt', '←', '↓', '→', 'Ctrl'];
+const keyboardButtonsRusShift = ['ё', '!', '"', '№', ';', '%', ':', '?', '*', '(', ')', '_', '+', 'Backspace', 'Tab', 'й', 'ц', 'у', 'к', 'е', 'н', 'г', 'ш', 'щ', 'з', 'х', 'ъ', '/', 'CapsLock', 'ф', 'ы', 'в', 'а', 'п', 'р', 'о', 'л', 'д', 'ж', 'э', 'Enter', 'Shift', 'я', 'ч', 'с', 'м', 'и', 'т', 'ь', 'б', 'ю', ',', '↑', 'Shift', 'Ctrl', 'Win', 'Alt', 'Space', 'Alt', '←', '↓', '→', 'Ctrl'];
 const text = [];
 let lang = [];
 
@@ -63,7 +64,7 @@ function initKeyboard() {
         break;
       case 'Space':
         button.classList.add('space');
-        button.innerText = ' ';
+        button.innerText = 'Space';
         break;
       case 'Tab':
         button.classList.add('tab');
@@ -130,7 +131,7 @@ function indexBuild() {
   const languages = document.createElement('p');
   main.append(languages);
   languages.classList.add('languages');
-  languages.innerText = 'To switch the language, the combination is: shift + alt.';
+  languages.innerText = 'To switch the language, the combination is: CtrlLeft + AltLeft.';
 }
 
 function render() {
@@ -177,6 +178,23 @@ function mouseInput() {
         }
       }
     }
+    if (localStorage.language === 'rus') {
+      if (capsLock.classList.contains('caps-on')) {
+        lang = keyboardButtonsRusShift;
+        for (let i = 0; i < button.length; i += 1) {
+          button[i].innerHTML = lang[i];
+        }
+        capsLock.classList.remove('caps-on');
+        toggleCaps();
+      } else {
+        lang = keyboardButtonsRusShift;
+        for (let i = 0; i < button.length; i += 1) {
+          button[i].innerHTML = lang[i];
+        }
+        capsLock.classList.add('caps-on');
+        toggleCaps();
+      }
+    }
     render();
   });
   document.addEventListener('mouseup', (event) => {
@@ -191,6 +209,23 @@ function mouseInput() {
           toggleCaps();
         } else {
           lang = keyboardButtonsEng;
+          for (let i = 0; i < button.length; i += 1) {
+            button[i].innerHTML = lang[i];
+          }
+          capsLock.classList.add('caps-on');
+          toggleCaps();
+        }
+      }
+      if (localStorage.language === 'rus') {
+        if (capsLock.classList.contains('caps-on')) {
+          lang = keyboardButtonsRus;
+          for (let i = 0; i < button.length; i += 1) {
+            button[i].innerHTML = lang[i];
+          }
+          capsLock.classList.remove('caps-on');
+          toggleCaps();
+        } else {
+          lang = keyboardButtonsRus;
           for (let i = 0; i < button.length; i += 1) {
             button[i].innerHTML = lang[i];
           }
@@ -216,6 +251,7 @@ function keyboardInput() {
   const buttons = document.querySelectorAll('.key');
 
   window.addEventListener('keydown', (event) => {
+    event.preventDefault();
     buttons.forEach((element) => {
       if (element.innerHTML === event.key) {
         element.classList.add('key_press');
@@ -233,6 +269,9 @@ function keyboardInput() {
         element.classList.add('key_press');
       }
       if (element.innerHTML === '↓' && event.key === 'ArrowDown') {
+        element.classList.add('key_press');
+      }
+      if (element.innerHTML === 'Space' && event.key === ' ') {
         element.classList.add('key_press');
       }
     });
@@ -258,6 +297,23 @@ function keyboardInput() {
             toggleCaps();
           } else {
             lang = keyboardButtonsEngShift;
+            for (let i = 0; i < button.length; i += 1) {
+              button[i].innerHTML = lang[i];
+            }
+            capsLock.classList.add('caps-on');
+            toggleCaps();
+          }
+        }
+        if (localStorage.language === 'rus') {
+          if (capsLock.classList.contains('caps-on')) {
+            lang = keyboardButtonsRusShift;
+            for (let i = 0; i < button.length; i += 1) {
+              button[i].innerHTML = lang[i];
+            }
+            capsLock.classList.remove('caps-on');
+            toggleCaps();
+          } else {
+            lang = keyboardButtonsRusShift;
             for (let i = 0; i < button.length; i += 1) {
               button[i].innerHTML = lang[i];
             }
@@ -320,23 +376,45 @@ function keyboardInput() {
       if (element.innerHTML === '↓' && event.key === 'ArrowDown') {
         element.classList.remove('key_press');
       }
+      if (element.innerHTML === 'Space' && event.key === ' ') {
+        element.classList.remove('key_press');
+      }
     });
     switch (event.key) {
       case 'Shift':
-        if (capsLock.classList.contains('caps-on')) {
-          lang = keyboardButtonsEng;
-          for (let i = 0; i < button.length; i += 1) {
-            button[i].innerHTML = lang[i];
+        if (localStorage.language === 'eng') {
+          if (capsLock.classList.contains('caps-on')) {
+            lang = keyboardButtonsEng;
+            for (let i = 0; i < button.length; i += 1) {
+              button[i].innerHTML = lang[i];
+            }
+            capsLock.classList.remove('caps-on');
+            toggleCaps();
+          } else {
+            lang = keyboardButtonsEng;
+            for (let i = 0; i < button.length; i += 1) {
+              button[i].innerHTML = lang[i];
+            }
+            capsLock.classList.add('caps-on');
+            toggleCaps();
           }
-          capsLock.classList.remove('caps-on');
-          toggleCaps();
-        } else {
-          lang = keyboardButtonsEng;
-          for (let i = 0; i < button.length; i += 1) {
-            button[i].innerHTML = lang[i];
+        }
+        if (localStorage.language === 'rus') {
+          if (capsLock.classList.contains('caps-on')) {
+            lang = keyboardButtonsRus;
+            for (let i = 0; i < button.length; i += 1) {
+              button[i].innerHTML = lang[i];
+            }
+            capsLock.classList.remove('caps-on');
+            toggleCaps();
+          } else {
+            lang = keyboardButtonsRus;
+            for (let i = 0; i < button.length; i += 1) {
+              button[i].innerHTML = lang[i];
+            }
+            capsLock.classList.add('caps-on');
+            toggleCaps();
           }
-          capsLock.classList.add('caps-on');
-          toggleCaps();
         }
         break;
       default:
@@ -348,6 +426,66 @@ function keyboardInput() {
   });
 }
 
+function changeLanguage(func, ...codes) {
+  const press = new Set();
+  document.addEventListener('keydown', (event) => {
+    press.add(event.code);
+    for (let i = 0; i < codes.length; i += 1) {
+      if (!press.has(codes[i])) {
+        return;
+      }
+    }
+    press.clear();
+    func();
+  });
+  document.addEventListener('keyup', (event) => {
+    press.delete(event.code);
+  });
+}
+
+changeLanguage(
+  () => {
+    const capsLock = document.querySelector('.caps');
+    const button = document.querySelectorAll('.key');
+    if (localStorage.language === 'rus') {
+      localStorage.language = 'eng';
+      if (capsLock.classList.contains('caps-on')) {
+        lang = keyboardButtonsEng;
+        for (let i = 0; i < button.length; i += 1) {
+          button[i].innerHTML = lang[i];
+        }
+        capsLock.classList.add('caps-on');
+        toggleCaps();
+      } else {
+        lang = keyboardButtonsEng;
+        for (let i = 0; i < button.length; i += 1) {
+          button[i].innerHTML = lang[i];
+        }
+        capsLock.classList.remove('caps-on');
+        toggleCaps();
+      }
+    } else {
+      localStorage.language = 'rus';
+      if (capsLock.classList.contains('caps-on')) {
+        lang = keyboardButtonsRus;
+        for (let i = 0; i < button.length; i += 1) {
+          button[i].innerHTML = lang[i];
+        }
+        capsLock.classList.add('caps-on');
+        toggleCaps();
+      } else {
+        lang = keyboardButtonsRus;
+        for (let i = 0; i < button.length; i += 1) {
+          button[i].innerHTML = lang[i];
+        }
+        capsLock.classList.remove('caps-on');
+        toggleCaps();
+      }
+    }
+  },
+  'ControlLeft',
+  'AltLeft',
+);
 indexBuild();
 mouseInput();
 capsLockToggle();
