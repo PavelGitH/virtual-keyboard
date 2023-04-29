@@ -1,4 +1,5 @@
 const keyboardButtonsEng = ['`', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'Backspace', 'Tab', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '[', ']', '\\', 'CapsLock', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ';', '\'', 'Enter', 'Shift', 'z', 'x', 'c', 'v', 'b', 'n', 'm', ',', '.', '/', '↑', 'Shift', 'Ctrl', 'Win', 'Alt', 'Space', 'Alt', '←', '↓', '→', 'Ctrl'];
+const keyboardButtonsEngShift = ['~', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+', 'Backspace', 'Tab', 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', '{', '}', '|', 'CapsLock', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', ':', '"', 'Enter', 'Shift', 'z', 'x', 'c', 'v', 'b', 'n', 'm', '< ', '>', '?', '↑', 'Shift', 'Ctrl', 'Win', 'Alt', 'Space', 'Alt', '←', '↓', '→', 'Ctrl'];
 const keyboardButtonsRus = ['ё', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '-', '=', 'Backspace', 'Tab', 'й', 'ц', 'у', 'к', 'е', 'н', 'г', 'ш', 'щ', 'з', 'х', 'ъ', '\\', 'CapsLock', 'ф', 'ы', 'в', 'а', 'п', 'р', 'о', 'л', 'д', 'ж', 'э', 'Enter', 'Shift', 'я', 'ч', 'с', 'м', 'и', 'т', 'ь', 'б', 'ю', '.', '↑', 'Shift', 'Ctrl', 'Win', 'Alt', 'Space', 'Alt', '←', '↓', '→', 'Ctrl'];
 const text = [];
 let lang = [];
@@ -8,6 +9,24 @@ if (localStorage.language === 'rus') {
 } else {
   lang = keyboardButtonsEng;
   localStorage.setItem('language', 'eng');
+}
+
+function toggleCaps() {
+  const letters = document.querySelectorAll('.key-simple');
+  const capsLock = document.querySelector('.caps');
+  if (capsLock.classList.contains('caps-on')) {
+    letters.forEach((element) => {
+      // the letter variable is introduced to work around the eslint bug;
+      const letter = element;
+      letter.innerText = letter.innerText.toUpperCase();
+    });
+  } else {
+    letters.forEach((element) => {
+      // the letter variable is introduced to work around the eslint bug;
+      const letter = element;
+      letter.innerText = letter.innerText.toLowerCase();
+    });
+  }
 }
 
 function initKeyboard() {
@@ -120,7 +139,9 @@ function render() {
 }
 
 function mouseInput() {
-  document.addEventListener('click', (event) => {
+  const capsLock = document.querySelector('.caps');
+  const button = document.querySelectorAll('.key');
+  document.addEventListener('mousedown', (event) => {
     if (event.target.classList.contains('key-simple')) {
       text.push(event.target.innerText);
     }
@@ -137,26 +158,48 @@ function mouseInput() {
     if (event.target.classList.contains('backspace')) {
       text.splice(text.length - 1, 1);
     }
+    if (event.target.classList.contains('shift')) {
+      if (localStorage.language === 'eng') {
+        if (capsLock.classList.contains('caps-on')) {
+          lang = keyboardButtonsEngShift;
+          for (let i = 0; i < button.length; i += 1) {
+            button[i].innerHTML = lang[i];
+          }
+          capsLock.classList.remove('caps-on');
+          toggleCaps();
+        } else {
+          lang = keyboardButtonsEngShift;
+          for (let i = 0; i < button.length; i += 1) {
+            button[i].innerHTML = lang[i];
+          }
+          capsLock.classList.add('caps-on');
+          toggleCaps();
+        }
+      }
+    }
     render();
   });
-}
-
-function toggleCaps() {
-  const letters = document.querySelectorAll('.key-simple');
-  const capsLock = document.querySelector('.caps');
-  if (capsLock.classList.contains('caps-on')) {
-    letters.forEach((element) => {
-      // the letter variable is introduced to work around the eslint bug;
-      const letter = element;
-      letter.innerText = letter.innerText.toUpperCase();
-    });
-  } else {
-    letters.forEach((element) => {
-      // the letter variable is introduced to work around the eslint bug;
-      const letter = element;
-      letter.innerText = letter.innerText.toLowerCase();
-    });
-  }
+  document.addEventListener('mouseup', (event) => {
+    if (event.target.classList.contains('shift')) {
+      if (localStorage.language === 'eng') {
+        if (capsLock.classList.contains('caps-on')) {
+          lang = keyboardButtonsEng;
+          for (let i = 0; i < button.length; i += 1) {
+            button[i].innerHTML = lang[i];
+          }
+          capsLock.classList.remove('caps-on');
+          toggleCaps();
+        } else {
+          lang = keyboardButtonsEng;
+          for (let i = 0; i < button.length; i += 1) {
+            button[i].innerHTML = lang[i];
+          }
+          capsLock.classList.add('caps-on');
+          toggleCaps();
+        }
+      }
+    }
+  });
 }
 
 function capsLockToggle() {
@@ -169,6 +212,7 @@ function capsLockToggle() {
 
 function keyboardInput() {
   const capsLock = document.querySelector('.caps');
+  const button = document.querySelectorAll('.key');
   const buttons = document.querySelectorAll('.key');
 
   window.addEventListener('keydown', (event) => {
@@ -204,8 +248,23 @@ function keyboardInput() {
         render();
         break;
       case 'Shift':
-        capsLock.classList.add('caps-on');
-        toggleCaps();
+        if (localStorage.language === 'eng') {
+          if (capsLock.classList.contains('caps-on')) {
+            lang = keyboardButtonsEngShift;
+            for (let i = 0; i < button.length; i += 1) {
+              button[i].innerHTML = lang[i];
+            }
+            capsLock.classList.remove('caps-on');
+            toggleCaps();
+          } else {
+            lang = keyboardButtonsEngShift;
+            for (let i = 0; i < button.length; i += 1) {
+              button[i].innerHTML = lang[i];
+            }
+            capsLock.classList.add('caps-on');
+            toggleCaps();
+          }
+        }
         break;
       case 'Alt':
         break;
@@ -264,8 +323,21 @@ function keyboardInput() {
     });
     switch (event.key) {
       case 'Shift':
-        capsLock.classList.remove('caps-on');
-        toggleCaps();
+        if (capsLock.classList.contains('caps-on')) {
+          lang = keyboardButtonsEng;
+          for (let i = 0; i < button.length; i += 1) {
+            button[i].innerHTML = lang[i];
+          }
+          capsLock.classList.remove('caps-on');
+          toggleCaps();
+        } else {
+          lang = keyboardButtonsEng;
+          for (let i = 0; i < button.length; i += 1) {
+            button[i].innerHTML = lang[i];
+          }
+          capsLock.classList.add('caps-on');
+          toggleCaps();
+        }
         break;
       default:
         buttons.forEach((element) => {
