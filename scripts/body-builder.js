@@ -207,8 +207,8 @@ function mouseInput() {
         }
       }
     }
-    render()
-  })
+    render();
+  });
   document.addEventListener('mouseup', (event) => {
     if (event.target.classList.contains('shift')) {
       if (localStorage.language === 'eng') {
@@ -246,7 +246,7 @@ function mouseInput() {
         }
       }
     }
-    render()
+    render();
   });
 }
 
