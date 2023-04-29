@@ -159,6 +159,18 @@ function mouseInput() {
     if (event.target.classList.contains('backspace')) {
       text.splice(text.length - 1, 1);
     }
+    if (event.target.classList.contains('up')) {
+      text.push('↑');
+    }
+    if (event.target.classList.contains('right')) {
+      text.push('→');
+    }
+    if (event.target.classList.contains('left')) {
+      text.push('←');
+    }
+    if (event.target.classList.contains('down')) {
+      text.push('↓');
+    }
     if (event.target.classList.contains('shift')) {
       if (localStorage.language === 'eng') {
         if (capsLock.classList.contains('caps-on')) {
@@ -321,6 +333,7 @@ function keyboardInput() {
             toggleCaps();
           }
         }
+        render();
         break;
       case 'Alt':
         break;
@@ -329,15 +342,24 @@ function keyboardInput() {
       case 'Control':
         break;
       case 'ArrowUp':
+        text.push('↑');
+        render();
         break;
       case 'ArrowRight':
+        text.push('→');
+        render();
         break;
       case 'ArrowLeft':
+        text.push('←');
+        render();
         break;
       case 'ArrowDown':
+        text.push('↓');
+        render();
         break;
       case 'Tab':
         text.push('    ');
+        render();
         break;
       case 'CapsLock':
         if (event.getModifierState('CapsLock')) {

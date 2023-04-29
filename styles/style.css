@@ -33,17 +33,19 @@
   cursor: pointer;
   transition: all .2s;
   opacity: 0.8;
+  box-shadow: 0 5px #999;
 }
 
 .key:active,
 .key_press {
   background: #d7e6f3;
-  transition: all .2s;
+  box-shadow: 0 1px #9b9a9a;
+  transform: translateY(4px);
 }
 
 .key:hover {
+  background: #d7e6f3;
   opacity: 1;
-  transition: all .2s;
 }
 
 .tab,
