@@ -189,26 +189,26 @@ function mouseInput() {
           toggleCaps();
         }
       }
-    }
-    if (localStorage.language === 'rus') {
-      if (capsLock.classList.contains('caps-on')) {
-        lang = keyboardButtonsRusShift;
-        for (let i = 0; i < button.length; i += 1) {
-          button[i].innerHTML = lang[i];
+      if (localStorage.language === 'rus') {
+        if (capsLock.classList.contains('caps-on')) {
+          lang = keyboardButtonsRusShift;
+          for (let i = 0; i < button.length; i += 1) {
+            button[i].innerHTML = lang[i];
+          }
+          capsLock.classList.remove('caps-on');
+          toggleCaps();
+        } else {
+          lang = keyboardButtonsRusShift;
+          for (let i = 0; i < button.length; i += 1) {
+            button[i].innerHTML = lang[i];
+          }
+          capsLock.classList.add('caps-on');
+          toggleCaps();
         }
-        capsLock.classList.remove('caps-on');
-        toggleCaps();
-      } else {
-        lang = keyboardButtonsRusShift;
-        for (let i = 0; i < button.length; i += 1) {
-          button[i].innerHTML = lang[i];
-        }
-        capsLock.classList.add('caps-on');
-        toggleCaps();
       }
     }
-    render();
-  });
+    render()
+  })
   document.addEventListener('mouseup', (event) => {
     if (event.target.classList.contains('shift')) {
       if (localStorage.language === 'eng') {
@@ -246,6 +246,7 @@ function mouseInput() {
         }
       }
     }
+    render()
   });
 }
 
